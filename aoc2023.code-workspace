@@ -1,0 +1,36 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../aoc2022"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"vector": "cpp",
+			"array": "cpp",
+			"deque": "cpp",
+			"list": "cpp",
+			"xstring": "cpp",
+			"utility": "cpp"
+		}
+	},
+	"launch": {
+		"version": "0.2.0",
+  	"configurations": [
+			{
+				"name": "run debug",
+				"type": "cppvsdbg",
+				"request": "launch",
+				"program": "${command:cmake.launchTargetPath}",
+				"args": [],
+				"stopAtEntry": false,
+				"cwd": "${command:cmake.getLaunchTargetDirectory}",
+				"environment": [],
+				"console": "integratedTerminal"
+			}
+		]
+	}
+}
