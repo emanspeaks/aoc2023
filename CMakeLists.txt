@@ -19,6 +19,9 @@ include(ForceUnicode)
 include(DefineWindows)
 include(HideVSCodeVars)
 
+# add_compile_definitions(AOCDEBUG)
+
+add_subdirectory(libaoc)
 add_subdirectory(day01)
 #add_subdirectory(day02)
 #add_subdirectory(day03)

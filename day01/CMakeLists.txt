@@ -8,5 +8,7 @@ add_custom_command(TARGET ${current_day} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/input.txt $<TARGET_FILE_DIR:${current_day}>
 )
 
+target_link_libraries(${current_day} libaoc)
+
 add_subdirectory(include)
 add_subdirectory(src)
