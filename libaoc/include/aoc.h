@@ -2,15 +2,34 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+
+#include "aocgrid.h"
 
 #define CAT(a, b) a##b
-#define aoc_debug_proto(t) t CAT(aoc_debug_, t)(t x)
-#define aoc_debug_std_proto(t) std::t CAT(aoc_debug_, t)(std::t x)
 
-aoc_debug_proto(int);
-aoc_debug_proto(char);
-aoc_debug_proto(double);
-aoc_debug_std_proto(string);
+template <typename T> T aoc_debug(T x) {
+  #ifdef AOCDEBUG
+    std::cout << x << "\n";
+  #endif
+  return x;
+}
 
-std::vector<std::string> tokenize_string(const std::string &s);
+template <typename T> std::vector<T> aoc_debug(std::vector<T> x) {
+  #ifdef AOCDEBUG
+    std::cout << "<";
+    bool first = true;
+    for (auto y: x) {
+      if (!first) std::cout << ", "; else first = false;
+      std::cout << y;
+    }
+    std::cout << ">\n";
+  #endif
+  return x;
+}
+
+std::vector<std::string> aoc_debug(std::vector<std::string> x);
+
+std::vector<std::string> tokenize_string(const std::string &s, const char delim = ' ');
 const std::string trim_final_char(const std::string &s);
+bool is_numeric(const char c);

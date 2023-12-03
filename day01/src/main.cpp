@@ -95,7 +95,7 @@ int part2(const std::string &s) {
       }
     }
   }
-  return aoc_debug_int(10*first + last);
+  return aoc_debug(10*first + last);
 }
 
 int part2alt(const char *s) {
@@ -178,5 +178,5 @@ int part2alt(const char *s) {
     p2 = p1;
     p1 = p;
   }
-  return aoc_debug_int(10*first + last);
+  return aoc_debug(10*first + last);
 }

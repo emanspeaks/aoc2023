@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]) {
     while (ifs) {
       std::getline(ifs, line);
       if (line.length()) {
-        sum += aoc_debug_int(parse_game(line, pwrtmp));
+        sum += aoc_debug(parse_game(line, pwrtmp));
         sumb += pwrtmp;
       }
     }
