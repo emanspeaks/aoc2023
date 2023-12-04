@@ -39,7 +39,7 @@ int main(int argc, char const *argv[]) {
 }
 
 int parse_game(const std::string &s, int &power) {
-  std::vector<std::string> svec = tokenize_string(s);
+  StrVec svec = tokenize_string(s);
   int ntok = svec.size();
   int id = std::stoi(trim_final_char(svec[1]));
   // std::vector<int> rvec, gvec, bvec;
