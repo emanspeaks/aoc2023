@@ -8,6 +8,8 @@
 
 #define CAT(a, b) a##b
 
+const int inf = std::numeric_limits<int>::max();
+
 template <typename T> T aoc_debug(T x) {
   #ifdef AOCDEBUG
     std::cout << x << "\n";
