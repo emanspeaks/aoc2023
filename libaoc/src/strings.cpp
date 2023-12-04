@@ -1,13 +1,6 @@
 #include <sstream>
 
-#include "aoc.h"
-
-StrVec aoc_debug(StrVec x) {
-  #ifdef AOCDEBUG
-    for (auto s: x) aoc_debug(s);
-  #endif
-  return x;
-}
+#include "strings.h"
 
 StrVec tokenize_string(const std::string &s, const char delim) {
   std::stringstream sstm(s);
