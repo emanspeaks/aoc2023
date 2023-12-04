@@ -1,8 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <vector>
-#include <math.h>
 
 #include "main.h"
 #include "aoc.h"
