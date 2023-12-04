@@ -3,17 +3,19 @@
 
 #include "main.h"
 #include "aoc.h"
+#include "thing.h"
 
 int main(int argc, char const *argv[]) {
   std::ifstream ifs("input.txt");
   std::string line;
+  Thing th;
 
   int sum = 0, sumb = 0;
   if (ifs.is_open()){
     while (ifs) {
       std::getline(ifs, line);
       if (line.length()) {
-
+        th.parseLine(line);
       }
     }
   } else {
