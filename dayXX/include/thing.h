@@ -6,8 +6,6 @@
 
 class Thing {
   public:
-    // Thing() {}
-
     void parseLine(const std::string &s);
 
   private:

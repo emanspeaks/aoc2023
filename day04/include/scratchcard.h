@@ -14,8 +14,6 @@ struct Scratchcard {
 
 class ScratchcardPile {
   public:
-    // Thing() {}
-
     void parseLine(const std::string &s);
     int scoreWinningCards();
     int countTotalWinningCardsRecursive();
