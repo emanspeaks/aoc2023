@@ -66,14 +66,36 @@ AlmIdx Almanac::seedRangesMinLoc() {
     m_ranges[0].push_back(AlmTblRange(tmp));
   }
 
-  bool found = false;
-  while (!found) {
-    found = true;
+  for (int i = 0; i < 7; i++) srcToDestRanges(i);
+
+  AlmIdx locmin = inf<AlmIdx>;
+  for (auto rng: m_ranges[7]) {
+    locmin = std::min(locmin, rng.min);
   }
 
-  return 0;
+  return locmin;
 }
 
-void Almanac::srcToDestRanges(int srctbl) {
-  std::vector<AlmTblRange> srcrng;
+void Almanac::srcToDestRanges(int srcidx) {
+  std::vector<AlmTblRange> &srcranges = m_ranges[srcidx], &destranges = m_ranges[srcidx + 1];
+  AlmTable &desttbl = m_tbls[srcidx + 1];
+
+  AlmIdx last, delta;
+  AlmRow row;
+  AlmTblRange drng, dsrng;
+  for (auto srng: srcranges) {
+    last = srng.min;
+    while (last <= srng.max) {
+      row = rowLookup(desttbl, last);
+      drng = AlmTblRange(row);
+      dsrng = AlmTblRange(row, true);
+      delta = dsrng.min - last;
+      if (delta < 0) {drng.min -= delta; dsrng.min = last;}
+      aoc_debug(destLookup(desttbl, last));
+      delta = dsrng.max - srng.max;
+      if (delta > 0) {drng.max -= delta; dsrng.max = srng.max;}
+      destranges.push_back(drng);
+      last = dsrng.max + 1;
+    }
+  }
 }

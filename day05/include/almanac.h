@@ -38,5 +38,5 @@ class Almanac {
     AlmIdx destLookup(AlmTable &tbl, AlmIdx src);
     AlmIdx calcMinLoc(std::vector<AlmIdx> &seedvec);
     AlmRow rowLookup(AlmTable &tbl, AlmIdx idx, bool buildifmissing = true, bool src = true);
-    void srcToDestRanges(int srctbl);
+    void srcToDestRanges(int srcidx);
 };
