@@ -9,7 +9,7 @@ template <class HashType, class DistType>
 class GraphNode {
   public:
     virtual HashType hash() = 0;
-    virtual DistType costToNode(GraphNode<HashType, DistType> x) = 0;
+    virtual DistType costToNode(GraphNode<HashType, DistType> &x) = 0;
     virtual std::unordered_set<GraphNode> getNeighbors() = 0;
 };
 
@@ -22,11 +22,11 @@ using NodeMap = std::unordered_map<HashType, GraphNode<HashType, DistType>>;
 template <class HashType, class DistType>
 class AStar {
   public:
-    virtual DistType h(GraphNode<HashType, DistType> x) = 0;
+    virtual DistType h(GraphNode<HashType, DistType> &x) = 0;
 
     GraphNodePath<HashType, DistType> shortestPath(
-      GraphNode<HashType, DistType> node_0,
-      GraphNode<HashType, DistType> node_f
+      GraphNode<HashType, DistType> &node_0,
+      GraphNode<HashType, DistType> &node_f
     ) {
       DistType gtmp;
       GraphNode<HashType, DistType> node = node_0;
@@ -81,8 +81,8 @@ class AStar {
 
   private:
     GraphNodePath<HashType, DistType> reconstructPath(
-      NodeMap<HashType, DistType> cameFrom,
-      GraphNode<HashType, DistType> end
+      NodeMap<HashType, DistType> &cameFrom,
+      GraphNode<HashType, DistType> &end
     ) {
       GraphNodePath<HashType, DistType> path;
       GraphNode<HashType, DistType> x = end;

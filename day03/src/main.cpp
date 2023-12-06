@@ -22,6 +22,7 @@ int main(int argc, char const *argv[]) {
     std::cout << "failed to open input.txt";
     return 1;
   }
+  ifs.close();
 
   // sch.printGrid();
   sum = sch.searchGrid(sumb);

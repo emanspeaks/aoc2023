@@ -25,6 +25,7 @@ int main(int argc, char const *argv[]) {
     std::cout << "failed to open input.txt";
     return 1;
   }
+  ifs.close();
 
   std::cout << "Day02A\n";
   std::cout << sum << "\n";
