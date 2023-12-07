@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]) {
   std::cout << cc.totalWinnings() << "\n";
 
   std::cout << AOC_DAY << " B\n";
-  std::cout << cc.totalJokerWinnings() << "\n";
+  std::cout << cc.totalWinnings(true) << "\n";
 
   return 0;
 }

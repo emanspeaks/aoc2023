@@ -15,38 +15,32 @@ enum HandType {
   fivekind   // 5      JOKER: (5), 1(4), 2(3), 3(2), 4(1),
 };
 
-const char STRENGTH[] = "23456789TJQKA";
-const char JOKERSTRENGTH[] = "J23456789TQKA";
-
-struct CamelRound {
+struct Round {
   std::string hand;
   int bid;
-  HandType type;
 
-  CamelRound(): hand(""), bid(0), type(HandType::highcard) {}
-  CamelRound(std::string newhand, int newbid): hand(newhand), bid(newbid), type(getType(newhand)) {}
-  CamelRound(std::string newhand, int newbid, HandType newtype): hand(newhand), bid(newbid), type(newtype) {}
+  Round(): hand(""), bid(0) {}
+  Round(std::string newhand, int newbid): hand(newhand), bid(newbid) {setType();}
+  Round(const Round &other): Round(other.hand, other.bid) {}
+  Round& operator=(const Round &other);
 
-  private:
-    HandType getType(std::string newhand);
-};
-
-struct JokerCamelRound: CamelRound {
-  JokerCamelRound(std::string newhand, int newbid): CamelRound(newhand, newbid, getType(newhand)) {}
+  const HandType type(bool joker = false) const {return (joker)? m_jokertype : m_type;}
 
   private:
-    HandType getType(std::string newhand);
+    HandType m_type;
+    HandType m_jokertype;
+
+    HandType getType(bool joker = false);
+    void setType();
 };
 
 class CamelCards {
   public:
     void parseLine(const std::string &s);
-    long long totalWinnings();
-    long long totalJokerWinnings();
+    long long totalWinnings(bool joker = false);
 
   private:
-    std::vector<CamelRound> m_rounds;
-    std::vector<JokerCamelRound> m_jokerrounds;
+    std::vector<Round> m_rounds;
 };
 
-bool compareHands(const CamelRound &a, const CamelRound &b, const char order[]);
+bool compareHands(const Round &a, const Round &b, bool joker = false);
