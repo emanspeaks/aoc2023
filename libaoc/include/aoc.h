@@ -2,6 +2,7 @@
 
 #define CAT(a, b) a##b
 
+#include "utf8.h"
 #include "strings.h"
 #include "debug.h"
 #include "aocgrid.h"

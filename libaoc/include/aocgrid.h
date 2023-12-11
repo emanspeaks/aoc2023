@@ -19,6 +19,17 @@ template <class T> class Grid {
     Grid(): Grid(0) {}
     Grid(T defaultval): m_mx(0), m_my(0), m_px(-1), m_py(-1), m_defaultval(defaultval) {}
 
+    Coord parseLine(const std::string &s) {
+      // returns coords of last point parsed
+      static int y = 0;
+      Coord tmp = {-1, y++};
+      for (auto c: s) {
+        tmp[0]++;
+        safeSet(tmp, c);
+      }
+      return tmp;
+    }
+
     void printGrid() {
       T v;
       char c;
@@ -29,6 +40,12 @@ template <class T> class Grid {
         }
         std::cout << "\n";
       }
+    }
+
+    void debugGrid() {
+      #ifdef AOCDEBUG
+        printGrid();
+      #endif
     }
 
     void clearMap() {
