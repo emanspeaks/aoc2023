@@ -35,7 +35,7 @@ template <class T> class Grid {
       char c;
       for (int y = m_my; y <= m_py; y++) {
         for (int x = m_mx; x <= m_px; x++) {
-          v = get(x, y);
+          v = safeGet(x, y);
           std::cout << v;
         }
         std::cout << "\n";
@@ -59,6 +59,11 @@ template <class T> class Grid {
       my = m_my;
       py = m_py;
     }
+
+    int mx() {return m_mx;}
+    int px() {return m_px;}
+    int my() {return m_my;}
+    int py() {return m_py;}
 
     T safeGet(int x, int y, T defaultval) {
       if (x > m_px || x < m_mx || y > m_py || y < m_my) return defaultval;
@@ -97,17 +102,35 @@ template <class T> class Grid {
       return x + y*(m_px - m_mx + 1);
     }
 
+    void insertColumn(int insert_before) {
+      insertAndFillX(insert_before - m_mx);
+      m_px++;
+    }
+
+    void insertRow(int insert_before) {
+      insertY(insert_before - m_my);
+      m_py++;
+    }
+
   private:
     XData<T> m_grid;
     int m_mx, m_my, m_px, m_py;
     T m_defaultval;
 
     void addPX() {m_grid.push_back(std::make_unique<YData<T>>());}
+    void insertX(int insert_before) {
+      m_grid.insert(std::next(m_grid.begin(), insert_before), std::make_unique<YData<T>>());
+    }
     void addMX() {m_grid.push_front(std::make_unique<YData<T>>());}
 
     void addPY() {for (auto &x: m_grid) addPY(x.get());}
     void addPY(XPtr<T> x) {
       x->push_back(m_defaultval);
+    }
+
+    void insertY(int insert_before) {for (auto &x: m_grid) insertY(insert_before, x.get());}
+    void insertY(int insert_before, XPtr<T> x) {
+      x->insert(std::next(x->begin(), insert_before), m_defaultval);
     }
 
     void addMY() {for (auto &x: m_grid) addMY(x.get());}
@@ -118,6 +141,12 @@ template <class T> class Grid {
     void addAndFillPX() {
       addPX();
       XPtr<T> pxp = m_grid.back().get();
+      for (int i = m_py - m_my + 1; i > 0; i--) addPY(pxp);
+    }
+
+    void insertAndFillX(int insert_before) {
+      insertX(insert_before);
+      XPtr<T> pxp = std::next(m_grid.begin(), insert_before)->get();
       for (int i = m_py - m_my + 1; i > 0; i--) addPY(pxp);
     }
 
