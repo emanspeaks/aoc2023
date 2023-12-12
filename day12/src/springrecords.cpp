@@ -24,7 +24,6 @@ unsigned long long SpringRecords::recPermCount() {
 
 unsigned long long SpringRecords::foldedRecPermCount() {
   unsigned long long sum = 0;
-  // return 0;
   std::string tmp;
   std::vector<int> tmpdamage;
   for (int i = 0; i < m_rec.size(); i++) {
@@ -43,32 +42,43 @@ unsigned long long SpringRecords::foldedRecPermCount() {
   return sum;
 }
 
-unsigned long long resolveRow(std::string &rec, std::vector<int> &damage, int irec, int idamage, int curdamage RECSTRDEBUGARG) {
+unsigned long long resolveRow(std::string &rec, std::vector<int> &damage) {
+  MemoMap memo;
+  return resolveRow(rec, damage, memo);
+}
+
+std::string argHash(int irec, int idamage, int curdamage) {
+  return std::to_string(irec) + " " + std::to_string(idamage) + " " + std::to_string(curdamage);
+}
+
+unsigned long long resolveRow(std::string &rec, std::vector<int> &damage, MemoMap &memo, int irec, int idamage, int curdamage RECSTRDEBUGARG) {
   // aoc_debug(debug);
-  // aoc_debug(std::to_string(irec) + " " + std::to_string(idamage) + " " + std::to_string(curdamage));
+  std::string args = argHash(irec, idamage, curdamage);
+  // aoc_debug(args);
+  if (memo.contains(args)) return memo[args];
   if (irec < rec.length()) switch (rec[irec]) {
-    case UNKNOWN: return tryAddDamage(rec, damage, irec, idamage, curdamage RECSTRDEBUGPASS) + tryAddWorking(rec, damage, irec, idamage, curdamage RECSTRDEBUGPASS);
-    case DAMAGED: return tryAddDamage(rec, damage, irec, idamage, curdamage RECSTRDEBUGPASS);
-    case WORKING: return tryAddWorking(rec, damage, irec, idamage, curdamage RECSTRDEBUGPASS);
+    case UNKNOWN: return memo[args] = tryAddDamage(rec, damage, memo, irec, idamage, curdamage RECSTRDEBUGPASS) + tryAddWorking(rec, damage, memo, irec, idamage, curdamage RECSTRDEBUGPASS);
+    case DAMAGED: return memo[args] = tryAddDamage(rec, damage, memo, irec, idamage, curdamage RECSTRDEBUGPASS);
+    case WORKING: return memo[args] = tryAddWorking(rec, damage, memo, irec, idamage, curdamage RECSTRDEBUGPASS);
   }
   // if we get here, damage matched except for last character.  Just check final damage.
   int tmp = (idamage == damage.size() - 1)? curdamage == damage[idamage] : idamage == damage.size();
   // if (tmp) aoc_debug(debug + " " + std::to_string(idamage) + " " + std::to_string(curdamage));
-  return tmp;
+  return memo[args] = tmp;
 }
 
-unsigned long long tryAddDamage(std::string &rec, std::vector<int> &damage, int irec, int idamage, int curdamage RECSTRDEBUGARG) {
+unsigned long long tryAddDamage(std::string &rec, std::vector<int> &damage, MemoMap &memo, int irec, int idamage, int curdamage RECSTRDEBUGARG) {
   if (idamage == damage.size()) return 0;
   if (++curdamage > damage[idamage]) return 0;
-  return resolveRow(rec, damage, ++irec, idamage, curdamage RECSTRDEBUGADD(DAMAGED));
+  return resolveRow(rec, damage, memo, ++irec, idamage, curdamage RECSTRDEBUGADD(DAMAGED));
 }
 
-unsigned long long tryAddWorking(std::string &rec, std::vector<int> &damage, int irec, int idamage, int curdamage RECSTRDEBUGARG) {
+unsigned long long tryAddWorking(std::string &rec, std::vector<int> &damage, MemoMap &memo, int irec, int idamage, int curdamage RECSTRDEBUGARG) {
   if (curdamage) {
     if (curdamage != damage[idamage]) return 0;
     idamage++;
     curdamage = 0;
   }
   if (idamage > damage.size()) return 0;
-  return resolveRow(rec, damage, ++irec, idamage, curdamage RECSTRDEBUGADD(WORKING));
+  return resolveRow(rec, damage, memo, ++irec, idamage, curdamage RECSTRDEBUGADD(WORKING));
 }

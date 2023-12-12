@@ -3,6 +3,7 @@
 #include <string>
 #include <deque>
 #include <vector>
+#include <unordered_map>
 
 #include "aoc.h"
 
@@ -24,6 +25,7 @@
   #define RECSTRDEBUGADD(x)
 #endif
 
+typedef std::unordered_map<std::string, unsigned long long> MemoMap;
 
 class SpringRecords {
   public:
@@ -37,6 +39,11 @@ class SpringRecords {
     std::vector<std::vector<int>> m_damage;
 };
 
-unsigned long long resolveRow(std::string &rec, std::vector<int> &damage, int irec = 0, int idamage = 0, int curdamage = 0 RECSTRDEBUGARGDEF);
-unsigned long long tryAddDamage(std::string &rec, std::vector<int> &damage, int irec, int idamage, int curdamage RECSTRDEBUGARG);
-unsigned long long tryAddWorking(std::string &rec, std::vector<int> &damage, int irec, int idamage, int curdamage RECSTRDEBUGARG);
+unsigned long long resolveRow(std::string &rec, std::vector<int> &damage);
+unsigned long long resolveRow(std::string &rec, std::vector<int> &damage, MemoMap &memo,
+  int irec = 0, int idamage = 0, int curdamage = 0 RECSTRDEBUGARGDEF);
+unsigned long long tryAddDamage(std::string &rec, std::vector<int> &damage, MemoMap &memo,
+  int irec, int idamage, int curdamage RECSTRDEBUGARG);
+unsigned long long tryAddWorking(std::string &rec, std::vector<int> &damage, MemoMap &memo,
+  int irec, int idamage, int curdamage RECSTRDEBUGARG);
+std::string argHash(int irec, int idamage, int curdamage);
