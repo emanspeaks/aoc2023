@@ -11,6 +11,7 @@
 typedef std::array<int, 2> Coord;
 
 template <class T> using YData = std::deque<T>;
+template <class T> using RowData = std::deque<T>;
 template <class T> using XPtr = YData<T>*;
 template <class T> using XData = std::deque<std::unique_ptr<YData<T>>>;
 
@@ -19,10 +20,13 @@ template <class T> class Grid {
     Grid(): Grid(0) {}
     Grid(T defaultval): m_mx(0), m_my(0), m_px(-1), m_py(-1), m_defaultval(defaultval) {}
 
+    Grid(const Grid&) = delete;
+    Grid& operator =(const Grid&) = delete;
+
     Coord parseLine(const std::string &s) {
       // returns coords of last point parsed
-      static int y = 0;
-      Coord tmp = {-1, y++};
+      // static int y = 0;
+      Coord tmp = {-1, m_py + 1};
       for (auto c: s) {
         tmp[0]++;
         safeSet(tmp, c);
@@ -110,6 +114,16 @@ template <class T> class Grid {
     void insertRow(int insert_before) {
       insertY(insert_before - m_my);
       m_py++;
+    }
+
+    YData<T> getCol(int x) {
+      return *m_grid[x - m_mx].get();
+    }
+
+    RowData<T> getRow(int y) {
+      RowData<T> out;
+      for (auto &x: m_grid) out.push_back(x.get()->at(y - m_my));
+      return out;
     }
 
   private:
