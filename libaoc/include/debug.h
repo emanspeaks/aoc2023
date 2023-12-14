@@ -10,7 +10,7 @@
 
 extern std::ofstream *aoc_debug_fp;
 
-template <typename T> T aoc_debug(T x, bool newline = true) {
+template <typename T> const T aoc_debug(const T x, bool newline = true) {
   #ifdef AOCDEBUG
     std::cout << x;
     if (newline) std::cout << "\n";
@@ -25,7 +25,7 @@ template <typename T> T aoc_debug(T x, bool newline = true) {
   return x;
 }
 
-template <typename T> std::vector<T> &aoc_debug(std::vector<T> &x, bool newline = true) {
+template <typename T> const std::vector<T> &aoc_debug(const std::vector<T> &x, bool newline = true) {
   #ifdef AOCDEBUG
     // std::cout << aoc_debug_fp << "\n";
     std::cout << "<";
@@ -49,7 +49,7 @@ template <typename T> std::vector<T> &aoc_debug(std::vector<T> &x, bool newline 
   return x;
 }
 
-template <typename T, int N> std::array<T, N> &aoc_debug(std::array<T, N> &x, bool newline = true) {
+template <typename T, int N> const std::array<T, N> &aoc_debug(const std::array<T, N> &x, bool newline = true) {
   #ifdef AOCDEBUG
     // std::cout << aoc_debug_fp << "\n";
     std::cout << "(";
@@ -73,7 +73,7 @@ template <typename T, int N> std::array<T, N> &aoc_debug(std::array<T, N> &x, bo
   return x;
 }
 
-template <typename T> std::deque<T> &aoc_debug(std::deque<T> &x, bool newline = true) {
+template <typename T> const std::deque<T> &aoc_debug(const std::deque<T> &x, bool newline = true) {
   #ifdef AOCDEBUG
     // std::cout << aoc_debug_fp << "\n";
     std::cout << "[";
@@ -97,7 +97,7 @@ template <typename T> std::deque<T> &aoc_debug(std::deque<T> &x, bool newline = 
   return x;
 }
 
-StrVec &aoc_debug(StrVec &x);
+const StrVec &aoc_debug(const StrVec &x);
 
 void aoc_debug_open();
 void aoc_debug_close(bool openincode = true);

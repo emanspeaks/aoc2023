@@ -3,20 +3,20 @@
 
 #include "main.h"
 #include "aoc.h"
-#include "thing.h"
+#include "dishplatform.h"
 
 int main(int argc, char const *argv[]) {
   ConsoleUTF8 set_console_to_utf8;
   std::ifstream ifs("input.txt");
   std::string line;
-  Thing th;
+  DishPlatform dp;
 
   int sum = 0, sumb = 0;
   if (ifs.is_open()){
     while (ifs) {
       std::getline(ifs, line);
       if (line.length()) {
-        th.parseLine(line);
+        dp.parseLine(line);
       }
     }
   } else {
@@ -26,10 +26,10 @@ int main(int argc, char const *argv[]) {
   ifs.close();
 
   std::cout << AOC_DAY << " A\n";
-  std::cout << sum << "\n";
+  std::cout << dp.initNorthBeamLoad() << "\n";
 
   std::cout << AOC_DAY << " B\n";
-  std::cout << sumb << "\n";
+  std::cout << dp.fullSpinCycle() << "\n";
 
   return 0;
 }

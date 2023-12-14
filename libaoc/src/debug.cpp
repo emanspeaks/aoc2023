@@ -2,7 +2,7 @@
 
 std::ofstream *aoc_debug_fp = nullptr;
 
-StrVec &aoc_debug(StrVec &x) {
+const StrVec &aoc_debug(const StrVec &x) {
   #ifdef AOCDEBUG
     for (auto s: x) aoc_debug(s);
   #endif
