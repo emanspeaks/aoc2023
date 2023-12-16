@@ -74,8 +74,14 @@ template <class T> class Grid {
       return get(x, y);
     }
 
+    bool isCoordOutside(Coord xy) {
+      return (xy[0] > m_px || xy[0] < m_mx || xy[1] > m_py || xy[1] < m_my);
+    }
+
+    bool isXyOutside(int x, int y) {return isCoordOutside({x, y});}
+
     T safeGet(Coord xy, T defaultval) {
-      if (xy[0] > m_px || xy[0] < m_mx || xy[1] > m_py || xy[1] < m_my) return defaultval;
+      if (isCoordOutside(xy)) return defaultval;
       return get(xy);
     }
 
