@@ -23,13 +23,13 @@ template <class T> class Grid {
     Grid(const Grid&) = delete;
     Grid& operator =(const Grid&) = delete;
 
-    Coord parseLine(const std::string &s) {
+    Coord parseLine(const std::string &s, char offset = 0) {
       // returns coords of last point parsed
       // static int y = 0;
       Coord tmp = {-1, m_py + 1};
       for (auto c: s) {
         tmp[0]++;
-        safeSet(tmp, c);
+        safeSet(tmp, c - offset);
       }
       return tmp;
     }

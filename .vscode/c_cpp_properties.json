@@ -15,6 +15,9 @@
             "cStandard": "c17",
             "cppStandard": "c++23",
             "intelliSenseMode": "windows-msvc-x64",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            },
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

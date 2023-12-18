@@ -8,28 +8,39 @@
 template <class HashType, class DistType>
 class GraphNode {
   public:
-    virtual HashType hash() = 0;
-    virtual DistType costToNode(GraphNode<HashType, DistType> &x) = 0;
-    virtual std::unordered_set<GraphNode> getNeighbors() = 0;
+    virtual HashType hash() const = 0;
+    virtual DistType costToNode(const std::shared_ptr<GraphNode<HashType, DistType>> &x) const = 0;
+    virtual std::vector<std::shared_ptr<GraphNode>> getNeighbors() const = 0;
+    virtual bool matches(const std::shared_ptr<GraphNode<HashType, DistType>> &other) const = 0;
 };
 
 template <class HashType, class DistType>
-using GraphNodePath = std::deque<GraphNode<HashType, DistType>>;
+using GraphNodePtr = std::shared_ptr<GraphNode<HashType, DistType>>;
 
 template <class HashType, class DistType>
-using NodeMap = std::unordered_map<HashType, GraphNode<HashType, DistType>>;
+using GraphNeighborList = std::vector<GraphNodePtr<HashType, DistType>>;
+
+template <class HashType, class DistType>
+using GraphNodePath = std::deque<GraphNodePtr<HashType, DistType>>;
+
+template <class HashType, class DistType>
+using NodeMap = std::unordered_map<HashType, GraphNodePtr<HashType, DistType>>;
 
 template <class HashType, class DistType>
 class AStar {
   public:
-    virtual DistType h(GraphNode<HashType, DistType> &x) = 0;
+    virtual DistType h(
+      const GraphNodePtr<HashType, DistType> &x,
+      const GraphNodePtr<HashType, DistType> &node_f
+    ) const = 0;
 
     GraphNodePath<HashType, DistType> shortestPath(
-      GraphNode<HashType, DistType> &node_0,
-      GraphNode<HashType, DistType> &node_f
-    ) {
+      const GraphNodePtr<HashType, DistType> &node_0,
+      const GraphNodePtr<HashType, DistType> &node_f
+    ) const {
       DistType gtmp;
-      GraphNode<HashType, DistType> node = node_0;
+      GraphNodePtr<HashType, DistType> node = node_0;
+      GraphNode<HashType, DistType> *nodeptr = node.get();
 
       NodeMap<HashType, DistType> cameFrom, nmap;
       std::unordered_map<HashType, DistType> f, g;
@@ -39,16 +50,16 @@ class AStar {
       std::priority_queue<HashType, std::vector<HashType>, decltype(fcompare)> openq(fcompare);
       std::unordered_set<HashType> openset;
 
-      HashType current = node.hash();
+      HashType current = nodeptr->hash();
       nmap[current] = node;
       g[current] = 0;
-      f[current] = h(node);
+      f[current] = h(node, node_f);
       openq.push(current);
       openset.insert(current);
 
       HashType newhash;
       int iters = 0;
-      std::unordered_set<GraphNode> neighborhood;
+      GraphNeighborList<HashType, DistType> neighborhood;
       Epoch begin = tic();
       while (!openq.empty()) {
         if (!(++iters % 1000)) aoc_debug("iter check: " + std::to_string(iters));
@@ -57,18 +68,19 @@ class AStar {
         openset.erase(current);
         openq.pop();
         node = nmap[current];
+        nodeptr = node.get();
 
-        if (node == node_f) return reconstructPath(cameFrom, node);
+        if (nodeptr->matches(node_f)) return reconstructPath(cameFrom, node);
 
-        neighborhood = node.getNeighbors();
-        for (auto neighbor: neighborhood) {
-          gtmp = g[current] + node.costToNode(neighbor); // "distance" is fixed as 1 min
-          newhash = node.hash();
+        neighborhood = nodeptr->getNeighbors();
+        for (auto &neighbor: neighborhood) {
+          gtmp = g[current] + nodeptr->costToNode(neighbor);
+          newhash = neighbor.get()->hash();
           if (!g.count(newhash) || gtmp < g[newhash]) {
             nmap[newhash] = neighbor;
             cameFrom[newhash] = node;
             g[newhash] = gtmp;
-            f[newhash] = gtmp + h(neighbor);
+            f[newhash] = gtmp + h(neighbor, node_f);
             if (openset.find(newhash) == openset.end()) {
               openq.push(newhash);
               openset.insert(newhash);
@@ -82,13 +94,14 @@ class AStar {
   private:
     GraphNodePath<HashType, DistType> reconstructPath(
       NodeMap<HashType, DistType> &cameFrom,
-      GraphNode<HashType, DistType> &end
-    ) {
+      const GraphNodePtr<HashType, DistType> &end
+    ) const {
       GraphNodePath<HashType, DistType> path;
-      GraphNode<HashType, DistType> x = end;
+      GraphNodePtr<HashType, DistType> x = end;
+      HashType hash;
       path.push_front(end);
-      while (cameFrom.contains(x.hash())) {
-        x = cameFrom[x];
+      while (cameFrom.contains(hash = x.get()->hash())) {
+        x = cameFrom[hash];
         path.push_front(x);
       }
       return path;
