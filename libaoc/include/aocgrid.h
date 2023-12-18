@@ -68,6 +68,8 @@ template <class T> class Grid {
     int px() {return m_px;}
     int my() {return m_my;}
     int py() {return m_py;}
+    int width() {return m_px - m_mx + 1;}
+    int height() {return m_py - m_my + 1;}
 
     T safeGet(int x, int y, T defaultval) {
       if (x > m_px || x < m_mx || y > m_py || y < m_my) return defaultval;
@@ -99,9 +101,9 @@ template <class T> class Grid {
     }
 
     Coord index2coord(int i) {
-      int width = m_px - m_mx + 1;
-      int x = i % width;
-      return Coord({x, i/width});
+      int w = width();
+      int x = i % w;
+      return Coord({x, i/w});
     }
 
     int coord2index(Coord xy) {
@@ -109,7 +111,7 @@ template <class T> class Grid {
     }
 
     int xy2index(int x, int y) {
-      return x + y*(m_px - m_mx + 1);
+      return x + y*width();
     }
 
     void insertColumn(int insert_before) {
@@ -161,19 +163,19 @@ template <class T> class Grid {
     void addAndFillPX() {
       addPX();
       XPtr<T> pxp = m_grid.back().get();
-      for (int i = m_py - m_my + 1; i > 0; i--) addPY(pxp);
+      for (int i = height(); i > 0; i--) addPY(pxp);
     }
 
     void insertAndFillX(int insert_before) {
       insertX(insert_before);
       XPtr<T> pxp = std::next(m_grid.begin(), insert_before)->get();
-      for (int i = m_py - m_my + 1; i > 0; i--) addPY(pxp);
+      for (int i = height(); i > 0; i--) addPY(pxp);
     }
 
     void addAndFillMX() {
       addMX();
       XPtr<T> mxp = m_grid.front().get();
-      for (int i = m_py - m_my + 1; i > 0; i--) addPY(mxp);
+      for (int i = height(); i > 0; i--) addPY(mxp);
     }
 
     void set(const Coord c, T v) {

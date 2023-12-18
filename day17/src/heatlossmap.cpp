@@ -46,13 +46,7 @@ HeatLossList HeatLossNode::getNeighbors() const {
     (char)(m_approachHead ^ Heading::swap ^ Heading::neg)
   }) {
     if (head == m_approachHead && m_approachCount == 3) continue;
-    next = xy;
-    switch (head) {
-      case Heading::north: next[1]--; break;
-      case Heading::south: next[1]++; break;
-      case Heading::east:  next[0]++; break;
-      case Heading::west:  next[0]--; break;
-    }
+    next = getNextCoord(xy, head);
     if (m_map.isCoordOutside(next)) continue;
     out.push_back(std::make_shared<HeatLossNode>(m_map, next, head, 1 + m_approachCount*(head == m_approachHead), m_step + 1));
   }

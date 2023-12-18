@@ -8,6 +8,7 @@
 #include "aocgrid.h"
 #include "timing.h"
 #include "a_star.h"
+#include "heading.h"
 
 template <typename T>
 const T inf = std::numeric_limits<T>::max();
