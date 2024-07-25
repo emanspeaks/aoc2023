@@ -6,3 +6,4 @@ target_sources(${current_day} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/aocday.h)
 
 target_sources(${current_day} PRIVATE main.h)
 target_sources(${current_day} PRIVATE digplan.h)
+target_sources(${current_day} PRIVATE polygon.h)

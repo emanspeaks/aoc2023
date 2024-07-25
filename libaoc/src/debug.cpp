@@ -13,7 +13,7 @@ void aoc_debug_open() {
   #ifdef AOCDEBUG
     aoc_debug_fp = new std::ofstream();
     aoc_debug_fp->open("aoc_debug.txt");
-    std::cout << aoc_debug_fp << "\n";
+    // std::cout << aoc_debug_fp << "\n";
   #endif
 }
 

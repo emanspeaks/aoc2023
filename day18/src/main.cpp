@@ -11,6 +11,8 @@ int main(int argc, char const *argv[]) {
   std::string line;
   DigPlan dp;
 
+  aoc_debug_open();
+
   int sum = 0, sumb = 0;
   if (ifs.is_open()){
     while (ifs) {
@@ -31,5 +33,6 @@ int main(int argc, char const *argv[]) {
   std::cout << AOC_DAY << " B\n";
   std::cout << sumb << "\n";
 
+  aoc_debug_close();
   return 0;
 }
